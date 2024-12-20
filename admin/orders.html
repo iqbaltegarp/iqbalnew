@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pesanan</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <header>
+        <h1>Pesanan</h1>
+        <nav>
+            <a href="dashboard.html">Tambah Barang</a>
+            <a href="logout.php">Logout</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <h2>Daftar Pesanan</h2>
+        <div id="order-list">
+            <!-- Pesanan akan ditampilkan di sini -->
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Shopie</p>
+    </footer>
+
+    <script>
+        const orderList = document.getElementById('order-list');
+
+        fetch('../api/get_orders.php')
+            .then(response => response.json())
+            .then(orders => {
+                orders.forEach(order => {
+                    const orderDiv = document.createElement('div');
+                    orderDiv.className = 'order';
+
+                    orderDiv.innerHTML = `
+                        <h3>${order.name} - ${order.phone}</h3>
+                        <p>${order.address}</p>
+                        <p>Total: Rp ${order.total_price.toLocaleString()}</p>
+                        <ul>
+                            ${order.cart.map(item => `<li>${item.name} x ${item.quantity}</li>`).join('')}
+                        </ul>
+                        <hr>
+                    `;
+
+                    orderList.appendChild(orderDiv);
+                });
+            });
+    </script>
+</body>
+</html>
